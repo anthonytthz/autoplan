@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manipulador de Arquivos XLSX</title>
+  <title>sisjk</title>
 </head>
 <body>
   <h1>Upload de Arquivo XLSX</h1>
@@ -13,11 +13,14 @@
   </form>
   <pre id="result"></pre>
   <button id="confirmButton" style="display:none;">Confirmar Alterações</button>
+  <pre id="namesList"></pre>
 
   <script>
     const form = document.getElementById('uploadForm');
     const result = document.getElementById('result');
     const confirmButton = document.getElementById('confirmButton');
+    const namesList = document.getElementById('namesList');
+
     let changes = [];
 
     form.addEventListener('submit', async (e) => {
@@ -28,20 +31,22 @@
         body: formData
       });
       const data = await response.json();
-      result.textContent = JSON.stringify(data, null, 2);
       changes = data;
-      confirmButton.style.display = 'block'; // Mostrar o botão de confirmação
+      result.textContent = JSON.stringify(data, null, 2);
+      confirmButton.style.display = 'block';
     });
 
     confirmButton.addEventListener('click', async () => {
       const response = await fetch('/confirm-changes', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({ changes })
       });
-      const message = await response.text();
-      alert(message);
-      confirmButton.style.display = 'none'; // Ocultar o botão após confirmação
+      const names = await response.json();
+      namesList.textContent = 'Nomes em ordem alfabética:\n' + names.join('\n');
+      console.log(names)
     });
   </script>
 </body>
