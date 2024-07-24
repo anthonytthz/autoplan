@@ -10,33 +10,38 @@
   <form id="uploadForm" enctype="multipart/form-data">
     <input type="file" name="file" id="fileInput" />
     <button type="submit">Upload</button>
-    <div id="loading" style="display:none;">Carregando...</div>
   </form>
-  
+  <pre id="result"></pre>
+  <button id="confirmButton" style="display:none;">Confirmar Alterações</button>
+
   <script>
     const form = document.getElementById('uploadForm');
     const result = document.getElementById('result');
-    const loading = document.getElementById('loading');
-  
+    const confirmButton = document.getElementById('confirmButton');
+    let changes = [];
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const formData = new FormData(form);
-      loading.style.display = 'block';
-      try {
-        const response = await fetch('/upload', {
-          method: 'POST',
-          body: formData
-        });
-        if (!response.ok) {
-          throw new Error('Erro na requisição');
-        }
-        const data = await response.json();
-        result.textContent = JSON.stringify(data, null, 2);
-      } catch (error) {
-        result.textContent = `Erro: ${error.message}`;
-      } finally {
-        loading.style.display = 'none';
-      }
+      const response = await fetch('/upload', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await response.json();
+      result.textContent = JSON.stringify(data, null, 2);
+      changes = data;
+      confirmButton.style.display = 'block'; // Mostrar o botão de confirmação
+    });
+
+    confirmButton.addEventListener('click', async () => {
+      const response = await fetch('/confirm-changes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ changes })
+      });
+      const message = await response.text();
+      alert(message);
+      confirmButton.style.display = 'none'; // Ocultar o botão após confirmação
     });
   </script>
 </body>
