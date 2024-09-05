@@ -33,25 +33,29 @@
     .btn {
       margin-top: 1% !important;
     }
-
-
+    body {
+      background-color: #252525;
+    }
+    .wht {
+      color: white !important;
+    }
   </style>
 </head>
 <body>
   <div class="row">
   <div class="col">
-    <p class="h2">Upload de Ativos</p>
-    <hr>
+    <p class="h2 wht">Upload de Ativos</p>
+    <hr class="wht">
     <form id="uploadForm" enctype="multipart/form-data">
-      <input type="file" name="file" id="fileInput" class="form-control" accept=".xlsx"/>
+      <input type="file" name="file" id="fileInput" class="form-control bg-bl" accept=".pdf"/>
       <button type="submit" class="btn btn-primary" style="margin: 1%;">Upload</button>
     </form>
-    <pre id="result" style="display: none;"></pre>
+    <pre id="result" style="display: none;" class="bg-bl"></pre>
     <button id="confirmButton" style="display:none;" class="btn btn-success">Confirmar Alterações</button>
   </div>
   <div class="col">
     <p class="h4" style="display: none;" id="ph2">Nomes Ordenados:</p>
-    <textarea id="namesList" readonly style="display: none;"></textarea>
+    <textarea id="namesList" readonly style="display: none;" class="bg-bl"></textarea>
     <button id="copyButton" style="display: none;" class="btn btn-secondary">Copiar Nomes</button>
   </div>
   </div>
